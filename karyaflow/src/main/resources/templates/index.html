@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KaryaFlow API Docs</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 2rem;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        h2 {
+            color: #34495e;
+        }
+        .endpoint {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border-left: 6px solid #ddd;
+            background: #fdfdfd;
+        }
+        .method {
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: white;
+            margin-right: 10px;
+        }
+        .GET { background: #27ae60; }
+        .POST { background: #2980b9; }
+        .PUT { background: #f39c12; }
+        .DELETE { background: #c0392b; }
+        .path {
+            font-family: monospace;
+        }
+        .desc {
+            margin-top: 0.5rem;
+            color: #555;
+        }
+        .param {
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #444;
+        }
+        .status {
+            font-size: 0.85rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📘 KaryaFlow API Documentation</h1>
+    <p>
+        KaryaFlow is a team and project management backend API.
+        Use this API to create, update, manage, and delete projects, assign team members, and track progress.
+        This documentation provides a quick overview of available endpoints and their usage.
+    </p>
+
+    <h2>Endpoints</h2>
+
+    <div class="endpoint">
+        <span class="method GET">GET</span>
+        <span class="path">/api/project/get-all-projects</span>
+        <div class="desc">Fetch a list of all available projects.</div>
+        <div class="status">Status Codes: 200 OK, 204 No Content</div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method POST">POST</span>
+        <span class="path">/api/project/create-project</span>
+        <div class="desc">Create a new project with title, description, start date, and team members.</div>
+        <div class="param">Body Parameters (JSON):</div>
+        <ul class="param">
+            <li><b>title</b>: string</li>
+            <li><b>description</b>: string</li>
+            <li><b>startDate</b>: string (format: YYYY-MM-DD)</li>
+            <li><b>teammembers</b>: array of strings</li>
+        </ul>
+        <div class="status">Status Codes: 201 Created, 400 Bad Request</div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method GET">GET</span>
+        <span class="path">/api/project/get-specific-project/{id}</span>
+        <div class="desc">Fetch a specific project using its ID.</div>
+        <div class="param">Path Parameter: <b>id</b> (Long)</div>
+        <div class="status">Status Codes: 200 OK, 404 Not Found</div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method PUT">PUT</span>
+        <span class="path">/api/project/update-project/{id}</span>
+        <div class="desc">Update a project’s information (title, description, dates, team, etc.).</div>
+        <div class="param">Path Parameter: <b>id</b> (Long)</div>
+        <div class="param">Body Parameters (JSON): same as POST</div>
+        <div class="status">Status Codes: 200 OK, 400 Bad Request, 404 Not Found</div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method DELETE">DELETE</span>
+        <span class="path">/api/project/delete-projects/{id}</span>
+        <div class="desc">Delete a specific project by its ID.</div>
+        <div class="param">Path Parameter: <b>id</b> (Long)</div>
+        <div class="status">Status Codes: 204 No Content, 404 Not Found</div>
+    </div>
+
+</div>
+</body>
+</html>
