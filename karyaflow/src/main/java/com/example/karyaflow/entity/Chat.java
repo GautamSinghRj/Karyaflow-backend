@@ -17,6 +17,8 @@ public class Chat {
     private String userName;
     @Column(nullable = false)
     private LocalDateTime timestamp;
+    @Lob
+    private byte[] file;
 
     public Long getId() {
         return id;
@@ -48,5 +50,13 @@ public class Chat {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
     }
 }

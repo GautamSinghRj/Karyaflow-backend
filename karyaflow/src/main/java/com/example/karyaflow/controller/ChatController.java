@@ -7,17 +7,16 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("api/messages")
 public class ChatController {
     private final ChatRepo repo;
@@ -32,13 +31,14 @@ public class ChatController {
     {
         try
         {
-            Authentication auth= SecurityContextHolder.getContext().getAuthentication();
-            String userName=auth !=null? auth.getName() : "Unknown user";
-
             Chat chat = new Chat();
             chat.setContent(msg.getContent());
-            chat.setUserName(userName);
+            chat.setUserName(msg.getUsername());
             chat.setTimestamp(LocalDateTime.now());
+            if(msg.getFile()!=null && !msg.getFile().isEmpty()){
+                byte[] file= Base64.getDecoder().decode(msg.getFile());
+                chat.setFile(file);
+            }
             repo.save(chat);
             return chat;
         }
