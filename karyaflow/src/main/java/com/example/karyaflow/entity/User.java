@@ -16,8 +16,7 @@ public class User {
     private String fullname;
     @Column(nullable = false)
     private String password;
-    @Lob
-    private byte[] image;
+    private String image;
 
     public Long getId() {
         return id;
@@ -27,11 +26,11 @@ public class User {
         this.id = id;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

@@ -13,7 +13,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         //this endpoint is the one that the users will be subscribed to
-        config.enableSimpleBroker("/chatroom");
+        config.enableSimpleBroker("/chatroom","/topic");
         //this endpoint is the one that is prefixed before every message mapping endpoint
         config.setApplicationDestinationPrefixes("/app");
     }

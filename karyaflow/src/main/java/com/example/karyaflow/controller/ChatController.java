@@ -3,6 +3,7 @@ package com.example.karyaflow.controller;
 import com.example.karyaflow.entity.Chat;
 import com.example.karyaflow.model.ChatMessage;
 import com.example.karyaflow.repo.ChatRepo;
+import com.example.karyaflow.service.FileUploadService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -19,10 +20,13 @@ import java.util.List;
 @RestController
 @RequestMapping("api/messages")
 public class ChatController {
+    //Each websocket connection has its own individual thread
     private final ChatRepo repo;
+    private final FileUploadService service;
 
-    public ChatController(ChatRepo repo) {
+    public ChatController(ChatRepo repo, FileUploadService service) {
         this.repo = repo;
+        this.service = service;
     }
 
     @MessageMapping("/chat")
@@ -37,7 +41,8 @@ public class ChatController {
             chat.setTimestamp(LocalDateTime.now());
             if(msg.getFile()!=null && !msg.getFile().isEmpty()){
                 byte[] file= Base64.getDecoder().decode(msg.getFile());
-                chat.setFile(file);
+                String url=service.uploadFile(file);
+                chat.setFile(url);
             }
             repo.save(chat);
             return chat;

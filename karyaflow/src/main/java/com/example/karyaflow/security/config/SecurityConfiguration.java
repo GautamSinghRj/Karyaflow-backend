@@ -59,7 +59,7 @@ public class SecurityConfiguration {
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         httpSecurity.authorizeHttpRequests(auth->auth
-                .requestMatchers("/api/**").authenticated()
+                .requestMatchers("/api/**","/auth/listUsers","/auth/logOut").authenticated()
                 .anyRequest().permitAll());
       return httpSecurity.build();
     }

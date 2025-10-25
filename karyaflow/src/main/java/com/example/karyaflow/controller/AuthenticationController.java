@@ -1,6 +1,7 @@
 package com.example.karyaflow.controller;
 
 import com.example.karyaflow.entity.User;
+import com.example.karyaflow.repo.UserRepo;
 import com.example.karyaflow.requestbody.AuthentaticationDetails.*;
 import com.example.karyaflow.security.utility.JwtUtility;
 import com.example.karyaflow.service.EmailService;
@@ -16,13 +17,12 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -40,12 +40,13 @@ public class AuthenticationController {
         this.jwtUtility = jwtUtility;
         this.redisTemplate = redisTemplate;
         this.emailService = emailService;
+
     }
 
     @PostMapping("/addNewUser")
-    public ResponseEntity<ApiResponse<RegistrationResponse>> createNewUser(@RequestBody RegistrationDetails registrationDetails) throws URISyntaxException {
-        userService.createUser(registrationDetails);
-        String token=jwtUtility.createToken(registrationDetails.getEmail());
+    public ResponseEntity<ApiResponse<RegistrationResponse>> createNewUser(@RequestBody RegistrationDetails registrationDetails) throws URISyntaxException, IOException {
+        User user=userService.createUser(registrationDetails);
+        String token=jwtUtility.createToken(user.getEmail());
         URI location = URI.create("/auth/user/" + registrationDetails.getEmail());
         emailService.sendMailWithAttachment(
                 registrationDetails.getEmail(),
@@ -116,10 +117,9 @@ public class AuthenticationController {
                 </html>
                 """
         );
-
         return ResponseEntity.created(location)
                 .body(new ApiResponse<>(true,"Registration Successful",
-                        new RegistrationResponse(token,registrationDetails.getUsername())));
+                        new RegistrationResponse(token,registrationDetails.getUsername(),user.getImage())));
     }
     @PostMapping("/validateUser")
     public ResponseEntity<ApiResponse<LoginResponse>> validateUser(@RequestBody LoginDetails loginDetails) {
@@ -130,7 +130,7 @@ public class AuthenticationController {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found in the database" + loginDetails.getEmail()));
         String token = jwtUtility.createToken(user.getEmail());
             return ResponseEntity.ok(new ApiResponse<>(true, "Login Successful",
-                    new LoginResponse(token, user.getUsername())));
+                    new LoginResponse(token, user.getUsername(),user.getImage())));
     }
     @PostMapping("/logOut")
     public ResponseEntity<ApiResponse<String>> logOutUser(HttpServletRequest request)
@@ -153,5 +153,15 @@ public class AuthenticationController {
         }
         SecurityContextHolder.clearContext();
         return ResponseEntity.ok(new ApiResponse<>(true, "Logout successful", null));
+    }
+    @GetMapping("/listUsers")
+    @ResponseStatus(HttpStatus.OK)
+    public List<User> getUsers(){
+        return userService.getUsers();
+    }
+    @GetMapping("/listUsernames")
+    @ResponseStatus(HttpStatus.OK)
+    public List<String> getUsernames(){
+        return userService.getUsernames();
     }
 }

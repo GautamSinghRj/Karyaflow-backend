@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/karyaflow.iml" filepath="$PROJECT_DIR$/.idea/karyaflow.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Karyaflow-backend.iml" filepath="$PROJECT_DIR$/.idea/Karyaflow-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/karyaflow/karyaflow.iml" filepath="$PROJECT_DIR$/karyaflow/karyaflow.iml" />
     </modules>
   </component>
 </project>

@@ -3,7 +3,6 @@ package com.example.karyaflow.requestbody.project;
 import com.example.karyaflow.entity.Project;
 import com.example.karyaflow.entity.Task;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
@@ -68,7 +67,6 @@ public class ProjectCreationDetails {
             return status;
         }
     }
-    @NotEmpty(message = "At least one team is needed")
     private List<TeamDetails> teamDetails=new ArrayList<>();
     private List<TaskDetails> taskDetails=new ArrayList<>();
 
